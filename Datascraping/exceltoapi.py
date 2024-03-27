@@ -8,10 +8,10 @@ folder_path = './output_excel_files'
 all_sheets_dict = {}
 
 # Iterate over all files in the folder
-for file_name in os.listdir(folder_path)[0:1]:
+for file_name in os.listdir(folder_path)[0:2]:
     if file_name.endswith('.xlsx'):  # Assuming all files are Excel files
         file_path = os.path.join(folder_path, file_name)
-        
+        print(file_name)
         # Read all sheets of the current file into a dictionary
         sheets_dict = pd.read_excel(file_path, sheet_name=None, engine='openpyxl')
 
@@ -29,3 +29,5 @@ for sheet_name, sheet_data in all_sheets_dict.items():
     print(f"Sheet: {sheet_name}")
     print(sheet_data)
     print("\n")
+
+

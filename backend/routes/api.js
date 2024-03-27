@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const College = require('../models/College');
 const Cutoffs = require('../models/Cutoffs');
+const rankColleges = require('../ranking/defaultRankingFunc');
+const weights = require('../ranking/defaultWeights');
 
 // @route POST api/applicant/register
 // @desc Register user
@@ -285,30 +287,19 @@ router.post("/getCollegeByName", (req, res) => {
 }
 );
 
-router.get("/getAllCollege", (req, res) => {
-
-  // console.log(req.body)
-
-  // Form validation
-  // const { errors, isValid } = validateRegisterInput(req.body);
-  // Check validation
-  // if (!isValid) {
-  //   return res.status(400).json(errors);
-  // }
-  College.find().then(college => {
-    if (college) {
-      console.log("hello")
-      console.log(college)
-      return res.status(200).json({ college });
+router.get("/getAllCollege", async (req, res) => {
+  try {
+    const colleges = await College.find();
+    console.log(colleges);
+    if (colleges.length > 0) {
+      return res.status(200).json(rankColleges({ college: colleges }, weights));
+    } else {
+      return res.status(400).json({ error: "No colleges" });
     }
-    else {
-      return res.status(400).json({ error: " college does not exists" });
-
-    }
-  });
-}
-);
-
-
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" + error });
+  }
+});
 
 module.exports = router;
