@@ -4,6 +4,7 @@ import re
 import os
 import time
 import fitz  # PyMuPDF
+va = True
 
 def check_text_in_pdf_url(pdf_url, target_text):
     # Fetch the PDF content from the URL
@@ -26,6 +27,7 @@ def check_text_in_pdf_bytes(pdf_content, target_text):
             
             if target_text in text:
                 print(f'caught')
+                va = False
                 return True
         
         return False
@@ -34,11 +36,8 @@ def check_text_in_pdf_bytes(pdf_content, target_text):
 
 
 os.system("mkdir ScrapedPDFDataNew")
-va = False
 def download_first_pdf_from_google(query,college):
     global va
-    if "Annai Violet Arts and Science College" in college:
-        va = True
     if va:
         time.sleep(3)
         # Construct the Google search URL
@@ -66,14 +65,14 @@ def download_first_pdf_from_google(query,college):
                         # print(pdf_url1)
                         target_text = "Data Submitted by Institution for India Rankings '2023'"
                         if check_text_in_pdf_url(pdf_url1, target_text):
-                            os.system("mkdir ScrapedPDFDataNewduck/"+'"'+college+'"')
+                            os.system("mkdir ScrapedPDF/"+'"'+college+'"')
                             response = requests.get(pdf_url1)
                             if response.status_code == 200:
                                 # Save the PDF to a local file
-                                with open("ScrapedPDFDataNewduck/"+college+"/"+str(i)+".pdf", "wb") as pdf_file:
+                                with open("ScrapedPDF/"+college+"/"+str(i)+".pdf", "wb") as pdf_file:
                                     pdf_file.write(response.content)
 
-                                with open("ScrapedPDFDataNewduck/"+college+"/"+str(i)+".txt", "w") as file:
+                                with open("ScrapedPDF/"+college+"/"+str(i)+".txt", "w") as file:
                                     # Write the text to the file
                                     # print("link")
                                     # print()
@@ -90,6 +89,7 @@ def download_first_pdf_from_google(query,college):
             print("Failed to connect to Google.")
     else:
         print("college already searched")
+    
 import pandas as pd
 import json
 
@@ -110,18 +110,17 @@ def list_folders(directory):
             folder_names.append(folder)
     return folder_names
 
-# Replace 'path_to_your_folder' with the path to your folder
-directory = './ScrapedPDFDataNew'
-directory1 = './ScrapedPDFDataNewduck'
-folders = list_folders(directory)
+
+directory1 = './ScrapedPDF'
 folders1 = list_folders(directory1)
 
 for i in range(len(df)):
     if str(df['city'][i]) in str(df['name'][i]):
         college = str(df['name'][i])
     else:
-        college = str(df['name'][i]) +" "+str(df['city'][i]) 
+        college = str(df['name'][i]) +" "+str(df['city'][i])+" "+str(df['state'][i]) 
     query = str(college) +" nirf 2023 filetype:pdf"
     print(college)
-    if college not in folders and college not in folders1:
+    if college not in folders1:
+        va = True
         download_first_pdf_from_google(query, college)
