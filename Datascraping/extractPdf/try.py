@@ -47,7 +47,7 @@ def pdf_to_excel(pdf_file_path, excel_file_path):
             prev_df.to_excel(writer, sheet_name=sheet_name, index=False)
 
 # Parent folder containing subfolders with PDF files
-parent_folder_path = "../"
+parent_folder_path = "../ScrapedPDF/"
 
 # Iterate through all subfolders and files
 for root, dirs, files in os.walk(parent_folder_path):
@@ -57,7 +57,7 @@ for root, dirs, files in os.walk(parent_folder_path):
             subfolder_name = os.path.basename(root)  # Extract the name of the subfolder
             
             # Create a new folder to save Excel files if it doesn't exist
-            output_folder = os.path.join(parent_folder_path, "output_excel_files_try")
+            output_folder = os.path.join(parent_folder_path, "output_excel_files_new")
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
             
