@@ -6,14 +6,6 @@ const ssDataSchema = new mongoose.Schema({
       type: String,
       required: true
    },
-   joining_academic_year: {
-      type: String,
-      required: true
-   },
-   graduating_academic_year: {
-      type: String,
-      required: true
-   },
    no_of_male_students: {
       type: Number,
       required: false
@@ -61,6 +53,18 @@ const ssDataSchema = new mongoose.Schema({
    full_tuitionfee_not_reimburse: {
       type: Number,
       required: false
+   },
+   students_in_graduating_batch: {
+      type: Number,
+      required: false
+   },
+   joining_academic_year: {
+      type: String,
+      required: true
+   },
+   graduating_academic_year: {
+      type: String,
+      required: true
    },
    median_salary: {
       type: Number,
@@ -120,7 +124,7 @@ let userSchema = new Schema({
    },
    data_link: {
       type: String,
-      required: true
+      required: false
    }
 
 }, {

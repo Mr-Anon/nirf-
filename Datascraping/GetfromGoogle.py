@@ -51,7 +51,7 @@ def download_first_pdf_from_google(query,college):
             # Parse the HTML content of the Google search page
             soup = BeautifulSoup(response.text, 'html.parser')
 
-            # Find all the links in the search results
+            # Find all the 1 in the search results
             links = soup.find_all("a")
             # print(links)
             for i in range(len(links)):
@@ -65,14 +65,14 @@ def download_first_pdf_from_google(query,college):
                         # print(pdf_url1)
                         target_text = "Data Submitted by Institution for India Rankings '2023'"
                         if check_text_in_pdf_url(pdf_url1, target_text):
-                            os.system("mkdir ScrapedPDF/"+'"'+college+'"')
+                            os.system("mkdir ScrapedPDFDataNewduck/"+'"'+college+'"')
                             response = requests.get(pdf_url1)
                             if response.status_code == 200:
                                 # Save the PDF to a local file
-                                with open("ScrapedPDF/"+college+"/"+str(i)+".pdf", "wb") as pdf_file:
+                                with open("ScrapedPDFDataNewduck/"+college+"/"+str(i)+".pdf", "wb") as pdf_file:
                                     pdf_file.write(response.content)
 
-                                with open("ScrapedPDF/"+college+"/"+str(i)+".txt", "w") as file:
+                                with open("ScrapedPDFDataNewduck/"+college+"/"+str(i)+".txt", "w") as file:
                                     # Write the text to the file
                                     # print("link")
                                     # print()
@@ -93,10 +93,11 @@ def download_first_pdf_from_google(query,college):
 import pandas as pd
 import json
 
-url = "https://www.nirfindia.org/2023/OverallRankingALL.html"
+# url = "https://www.nirfindia.org/2023/OverallRankingALL.html"
+url = "https://www.nirfindia.org/2023/OverallRanking.html"
 
 # Scraping the html document to load the tabular list of institutes
-df: pd.DataFrame = pd.read_html(url)[0][["Name", "City", "State"]]
+df: pd.DataFrame = pd.read_html(url)[0][["Institute ID","Name", "City", "State"]]
 df.columns = df.columns.str.lower()
 
 result = df.to_json(orient="records")
@@ -111,16 +112,46 @@ def list_folders(directory):
     return folder_names
 
 
-directory1 = './ScrapedPDF'
+directory1 = './ScrapedPDFDataNewduck'
 folders1 = list_folders(directory1)
 
+from bs4 import BeautifulSoup, SoupStrainer
+import requests
+
+page = requests.get(url)    
+data = page.text
+soup = BeautifulSoup(data)
+links1 = []
+for link in soup.find_all('a'):
+    pdf_url2 = str(link.get('href'))    
+    pdf_url3 = re.sub(r'.*q=(.*\.pdf).*',r'\1',pdf_url2)
+    if '.pdf' in pdf_url3:
+        print(pdf_url3)
+        links1.append(pdf_url3)
+
+print(df.keys())
 for i in range(len(df)):
     if str(df['city'][i]) in str(df['name'][i]):
-        college = str(df['name'][i])
+        college = str(df['name'][i]).split("More Details")[0].replace('`','')
     else:
-        college = str(df['name'][i]) +" "+str(df['city'][i])+" "+str(df['state'][i]) 
+        college = str(df['name'][i]).split("More Details")[0].replace('`','') +" "+str(df['city'][i]) 
     query = str(college) +" nirf 2023 filetype:pdf"
     print(college)
     if college not in folders1:
         va = True
-        download_first_pdf_from_google(query, college)
+        for link in links1:
+            if str(df['institute id'][i]) in link: 
+                os.system("mkdir ScrapedPDFDataNewduck/"+'"'+college+'"')
+                response = requests.get(link)
+                if response.status_code == 200:
+                    # Save the PDF to a local file
+                    with open("ScrapedPDFDataNewduck/"+college+"/"+str(i)+".pdf", "wb") as pdf_file:
+                        pdf_file.write(response.content)
+
+                    with open("ScrapedPDFDataNewduck/"+college+"/"+str(i)+".txt", "w") as file:
+                        # Write the text to the file
+                        # print("link")
+                        # print()
+                        # print(str( link.get('href', '')).split('/url?q=')[1].split('.pdf')[0] + '.pdf')
+                        file.write(str(link))
+        # download_first_pdf_from_google(query, college)

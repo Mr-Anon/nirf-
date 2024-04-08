@@ -10,7 +10,7 @@ const weights = require('../ranking/defaultWeights');
 // @access Public
 router.post("/addCollege", (req, res) => {
 
-  College.findOne({ code: req.body.code }).then(college => {
+  College.findOne({ name: req.body.name }).then(college => {
     if (college) {
       console.log("hello")
       console.log(college)

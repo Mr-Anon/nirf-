@@ -43,11 +43,12 @@ def pdf_to_excel(pdf_file_path, excel_file_path):
 
         # Write the last table
         if prev_df is not None:
+            # print(prev_df)
             sheet_name = prev_title or 'Sheet_last'  # Use default name if prev_title is None
             prev_df.to_excel(writer, sheet_name=sheet_name, index=False)
 
 # Parent folder containing subfolders with PDF files
-parent_folder_path = "../ScrapedPDF/"
+parent_folder_path = "../ScrapedPDFDataNewduck/"
 
 # Iterate through all subfolders and files
 for root, dirs, files in os.walk(parent_folder_path):
@@ -66,5 +67,6 @@ for root, dirs, files in os.walk(parent_folder_path):
             pdf_to_excel(pdf_file_path, excel_file_path)
             
             print(f"Tables extracted from '{file}' and saved to '{excel_file_path}'.")
+
 
 print("Extraction complete!")
