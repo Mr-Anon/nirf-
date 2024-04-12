@@ -3,7 +3,9 @@ const router = express.Router();
 const College = require('../models/College');
 const Cutoffs = require('../models/Cutoffs');
 const rankColleges = require('../ranking/defaultRankingFunc');
+const toggleRank = require('../toggles/defaultToggleFunc');
 const weights = require('../ranking/defaultWeights');
+const toggles = require('../toggles/defaultToggles');
 
 // @route POST api/applicant/register
 // @desc Register user
@@ -296,6 +298,22 @@ router.get("/getAllCollege", async (req, res) => {
     } else {
       return res.status(400).json({ error: "No colleges" });
     }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" + error });
+  }
+});
+
+router.post("/getSetToggle", async (req, res) => {
+  try {
+    const colleges = await College.find();
+    console.log(colleges);
+    if (colleges.length > 0) {
+      return res.status(200).json(toggleRank({ college: colleges }, weights, toggles));
+    } else {
+      return res.status(400).json({ error: "No colleges" });
+    }
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Internal server error" + error });
