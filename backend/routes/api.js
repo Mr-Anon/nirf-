@@ -6,6 +6,7 @@ const rankColleges = require('../ranking/defaultRankingFunc');
 const toggleRank = require('../toggles/defaultToggleFunc');
 const weights = require('../ranking/defaultWeights');
 const toggles = require('../toggles/defaultToggles');
+const skyline = require('../Skyline/defaultSkylineValues')
 
 // @route POST api/applicant/register
 // @desc Register user
@@ -327,6 +328,23 @@ router.get("/getToggles", async (req, res) => {
       return res.status(200).json({toggles: Object.keys(toggles)});
     } else {
       return res.status(400).json({ error: "No toggles" });
+    }
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" + error });
+  }
+});
+
+
+
+router.get("/getSkylineValues", async (req, res) => {
+  try {
+    console.log(Object.keys(skyline).length)
+    if (Object.keys(skyline).length > 0) {
+      return res.status(200).json({skyline: Object.keys(skyline)});
+    } else {
+      return res.status(400).json({ error: "No skyline values" });
     }
 
   } catch (error) {
