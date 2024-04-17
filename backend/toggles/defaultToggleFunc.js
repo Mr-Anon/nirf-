@@ -1,88 +1,48 @@
-function splitOnLastSpace(str) {
-    const lastSpaceIndex = str.lastIndexOf(' ');
-    if (lastSpaceIndex !== -1) {
-        const firstPart = str.substring(0, lastSpaceIndex);
-        const secondPart = str.substring(lastSpaceIndex + 1);
-        return [firstPart, secondPart];
-    } else {
-        // If there's no space in the string
-        return [str];
+const rankColleges = require('../ranking/defaultRankingFunc');
+
+function ToggleFilterCollegesByFacilities(colleges) {
+    return colleges.filter(college => {
+        return college.pcs_lift_ramps &&
+            college.pcs_wheelchair &&
+            college.pcs_designed_toilets;
+    });
+}
+
+function ToggleFilterCollegesByUG(colleges) {
+    return colleges.filter(college => {
+        return college.ssDataArray.some(data => {
+            return data.name_of_class.toLowerCase().includes("ug");
+        });
+    });
+}
+
+function ToggleFilterCollegesByPG(colleges) {
+    return colleges.filter(college => {
+        return college.ssDataArray.some(data => {
+            return data.name_of_class.toLowerCase().includes("pg");
+        });
+    });
+}
+
+function getRankedToggled(response, weights, toggles) {
+    var colleges = response.college;
+    console.log(toggles)
+    console.log(colleges.length)
+
+    if (toggles.PCS == true) {
+        console.log("PCS toggle True")
+        colleges = ToggleFilterCollegesByFacilities(colleges);
     }
+    if (toggles.UG == true) {
+        console.log("UG toggle True")
+        colleges = ToggleFilterCollegesByUG(colleges);
+    }
+    if (toggles.PG == true) {
+        console.log("PG toggle True")
+        colleges = ToggleFilterCollegesByPG(colleges);
+    }
+    console.log(colleges.length)
+    return rankColleges({college: colleges}, weights);
 }
 
-function getRankedToggled(response, weights) {
-    // Extract college information from the response
-    const colleges = response.college;
-
-    // Create a ranked list by calculating a weighted score for each college
-    const rankedList = colleges.map(college => {
-        // Initialize weighted score for the college
-        let weightedScore = 0;
-
-        // Weight parameters and their ratings
-        const parameters = {
-            placementPercentage: {
-                weight: weights.placementPercentage, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + (curr.number_of_students_placed / curr.number_of_students_graduating) * 100, 0) / college.ssDataArray.length;
-                }
-            },
-            medianSalary: {
-                weight: weights.medianSalary, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.median_salary / 100000, 0) / college.ssDataArray.length;
-                }
-            },
-            noOfSelectedForHigherStudies: {
-                weight: weights.noOfSelectedForHigherStudies, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.no_of_selected_for_higher_studies / 100, 0) / college.ssDataArray.length;
-                }
-            },
-            fullTimePhD: { weight: weights.fullTimePhD, getValue: college => college.fulltime_phd / 100 },
-            partTimePhD: { weight: weights.partTimePhD, getValue: college => college.parttime_phd / 100 },
-            amountReceivedResearch: { weight: weights.amountReceivedResearch, getValue: college => college.amount_received_research / 10000000 },
-            noOfFaculty: { weight: weights.noOfFaculty, getValue: college => college.no_of_faculty / 100 },
-            pcsLiftRamps: { weight: weights.pcsLiftRamps, getValue: college => college.pcs_lift_ramps ? 5 : 0 },
-            pcsWheelchair: { weight: weights.pcsWheelchair, getValue: college => college.pcs_wheelchair ? 5 : 0 },
-            pcsDesignedToilets: { weight: weights.pcsDesignedToilets, getValue: college => college.pcs_designed_toilets ? 5 : 0 },
-            // Add more parameters
-            economicallyBackwardStudents: {
-                weight: weights.economicallyBackwardStudents, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.economically_backward_students / 100, 0) / college.ssDataArray.length;
-                }
-            },
-            sociallyChallengedStudents: {
-                weight: weights.sociallyChallengedStudents, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.socially_challenged_students / 100, 0) / college.ssDataArray.length;
-                }
-            },
-            withinStateStudents: {
-                weight: weights.withinStateStudents, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.within_state_students / 100, 0) / college.ssDataArray.length;
-                }
-            },
-            outsideStateStudents: {
-                weight: weights.outsideStateStudents, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.outside_state_students / 100, 0) / college.ssDataArray.length;
-                }
-            }
-            // Add more parameters here 
-        };
-
-        // Calculate weighted score for each parameter
-        for (const paramName in parameters) {
-            if (parameters.hasOwnProperty(paramName)) {
-                const paramWeight = parameters[paramName].weight;
-                const paramValue = parameters[paramName].getValue(college);
-                console.log(paramName + ": " + paramValue)
-                if (!isNaN(paramValue))
-                    weightedScore += paramWeight * paramValue;
-            }
-        }
-        const [firstPart, secondPart] = splitOnLastSpace(college.name);
-        return { name: college.name, city: secondPart, weightedScore: weightedScore };
-    }).sort((a, b) => b.weightedScore - a.weightedScore);
-
-    console.log(rankedList)
-    return rankedList;
-}
-
-module.exports = rankColleges;
+module.exports = getRankedToggled;

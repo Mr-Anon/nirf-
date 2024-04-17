@@ -11,8 +11,7 @@ function splitOnLastSpace(str) {
 }
 
 function rankColleges(response, weights) {
-    // Extract college information from the response
-    const colleges = response.college;
+    var colleges = response.college;
 
     // Create a ranked list by calculating a weighted score for each college
     const rankedList = colleges.map(college => {
@@ -72,7 +71,7 @@ function rankColleges(response, weights) {
             if (parameters.hasOwnProperty(paramName)) {
                 const paramWeight = parameters[paramName].weight;
                 const paramValue = parameters[paramName].getValue(college);
-                console.log(paramName + ": " + paramValue)
+                // console.log(paramName + ": " + paramValue)
                 if (!isNaN(paramValue))
                     weightedScore += paramWeight * paramValue;
             }
@@ -81,7 +80,7 @@ function rankColleges(response, weights) {
         return { name: college.name, city: secondPart, weightedScore: weightedScore };
     }).sort((a, b) => b.weightedScore - a.weightedScore);
 
-    console.log(rankedList)
+    // console.log(rankedList)
     return rankedList;
 }
 

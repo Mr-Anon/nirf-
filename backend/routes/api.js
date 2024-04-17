@@ -304,14 +304,29 @@ router.get("/getAllCollege", async (req, res) => {
   }
 });
 
-router.post("/getSetToggle", async (req, res) => {
+router.post("/getToggled", async (req, res) => {
   try {
+    console.log(req.body)
     const colleges = await College.find();
-    console.log(colleges);
     if (colleges.length > 0) {
-      return res.status(200).json(toggleRank({ college: colleges }, weights, toggles));
+      return res.status(200).json(toggleRank({ college: colleges }, weights, req.body));
     } else {
       return res.status(400).json({ error: "No colleges" });
+    }
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" + error });
+  }
+});
+
+router.get("/getToggles", async (req, res) => {
+  try {
+    console.log(Object.keys(toggles).length)
+    if (Object.keys(toggles).length > 0) {
+      return res.status(200).json({toggles: Object.keys(toggles)});
+    } else {
+      return res.status(400).json({ error: "No toggles" });
     }
 
   } catch (error) {
