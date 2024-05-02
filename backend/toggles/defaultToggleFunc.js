@@ -1,4 +1,3 @@
-const rankColleges = require('../ranking/defaultRankingFunc');
 
 function ToggleFilterCollegesByFacilities(colleges) {
     return colleges.filter(college => {
@@ -24,7 +23,7 @@ function ToggleFilterCollegesByPG(colleges) {
     });
 }
 
-function getRankedToggled(response, weights, toggles) {
+function getRankedToggled(response, toggles) {
     var colleges = response.college;
     console.log(toggles)
     console.log(colleges.length)
@@ -42,7 +41,7 @@ function getRankedToggled(response, weights, toggles) {
         colleges = ToggleFilterCollegesByPG(colleges);
     }
     console.log(colleges.length)
-    return rankColleges({college: colleges}, weights);
+    return colleges;
 }
 
 module.exports = getRankedToggled;

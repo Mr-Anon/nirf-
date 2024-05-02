@@ -84,4 +84,5 @@ function rankColleges(response, weights) {
     return rankedList;
 }
 
+
 module.exports = rankColleges;

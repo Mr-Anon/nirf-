@@ -3,7 +3,7 @@ const router = express.Router();
 const College = require('../models/College');
 const Cutoffs = require('../models/Cutoffs');
 const rankColleges = require('../ranking/defaultRankingFunc');
-const toggleRank = require('../toggles/defaultToggleFunc');
+const rankToggledColleges = require('../ranking/toggledRankingFunc');
 const weights = require('../ranking/defaultWeights');
 const toggles = require('../toggles/defaultToggles');
 const skyline = require('../Skyline/defaultSkylineValues')
@@ -305,12 +305,13 @@ router.get("/getAllCollege", async (req, res) => {
   }
 });
 
-router.post("/getToggled", async (req, res) => {
+router.post("/getToggledColleges", async (req, res) => {
   try {
     console.log(req.body)
     const colleges = await College.find();
     if (colleges.length > 0) {
-      return res.status(200).json(toggleRank({ college: colleges }, weights, req.body));
+      console.log("asdasd")
+      return res.status(200).json(await rankToggledColleges({ college: colleges }, weights, req.body));
     } else {
       return res.status(400).json({ error: "No colleges" });
     }
