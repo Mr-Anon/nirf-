@@ -25,8 +25,8 @@ function ToggleFilterCollegesByPG(colleges) {
 
 function getRankedToggled(response, toggles) {
     var colleges = response.college;
-    console.log(toggles)
-    console.log(colleges.length)
+    // console.log(toggles)
+    // console.log(colleges.length)
 
     if (toggles.PCS == true) {
         console.log("PCS toggle True")
@@ -40,7 +40,7 @@ function getRankedToggled(response, toggles) {
         console.log("PG toggle True")
         colleges = ToggleFilterCollegesByPG(colleges);
     }
-    console.log(colleges.length)
+    // console.log(colleges.length)
     return colleges;
 }
 

@@ -7,6 +7,7 @@ const rankToggledColleges = require('../ranking/toggledRankingFunc');
 const weights = require('../ranking/defaultWeights');
 const toggles = require('../toggles/defaultToggles');
 const skyline = require('../Skyline/defaultSkylineValues')
+const generateFilters = require('../filters/defaultfilterValues')
 
 // @route POST api/applicant/register
 // @desc Register user
@@ -15,8 +16,8 @@ router.post("/addCollege", (req, res) => {
 
   College.findOne({ name: req.body.name }).then(college => {
     if (college) {
-      console.log("hello")
-      console.log(college)
+      // console.log("hello")
+      // console.log(college)
       return res.status(400).json({ error: " college already exists" });
     }
     else {
@@ -40,7 +41,7 @@ router.post("/addCollege", (req, res) => {
           res.json(college)
 
         })
-        .catch(err => console.log(err));
+        // .catch(err => console.log(err));
     }
   });
 }
@@ -234,7 +235,7 @@ router.post("/addCutoff", async (req, res) => {
 
     res.status(201).json({ message: 'Data added or updated successfully' });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -254,8 +255,8 @@ router.post("/getCollegeByCode", (req, res) => {
   // }
   College.findOne({ code: req.body.code }).then(college => {
     if (college) {
-      console.log("hello")
-      console.log(college)
+      // console.log("hello")
+      // console.log(college)
       return res.status(200).json({ college });
     }
     else {
@@ -278,8 +279,8 @@ router.post("/getCollegeByName", (req, res) => {
   // }
   College.find({ name: req.body.name }).then(college => {
     if (college) {
-      console.log("hello")
-      console.log(college)
+      // console.log("hello")
+      // console.log(college)
       return res.status(200).json({ college });
     }
     else {
@@ -293,38 +294,39 @@ router.post("/getCollegeByName", (req, res) => {
 router.get("/getAllCollege", async (req, res) => {
   try {
     const colleges = await College.find();
-    console.log(colleges);
+    // console.log(colleges);
     if (colleges.length > 0) {
       return res.status(200).json(rankColleges({ college: colleges }, weights));
     } else {
       return res.status(400).json({ error: "No colleges" });
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(500).json({ error: "Internal server error" + error });
   }
 });
 
 router.post("/getToggledColleges", async (req, res) => {
   try {
-    console.log(req.body)
+    // console.log(req.body)
     const colleges = await College.find();
     if (colleges.length > 0) {
-      console.log("asdasd")
+      // console.log("asdasd")
+      // console.log(req.body.filters)
       return res.status(200).json(await rankToggledColleges({ college: colleges }, weights, req.body));
     } else {
       return res.status(400).json({ error: "No colleges" });
     }
 
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(500).json({ error: "Internal server error" + error });
   }
 });
 
 router.get("/getToggles", async (req, res) => {
   try {
-    console.log(Object.keys(toggles).length)
+    // console.log(Object.keys(toggles).length)
     if (Object.keys(toggles).length > 0) {
       return res.status(200).json({toggles: Object.keys(toggles)});
     } else {
@@ -332,7 +334,7 @@ router.get("/getToggles", async (req, res) => {
     }
 
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(500).json({ error: "Internal server error" + error });
   }
 });
@@ -341,7 +343,7 @@ router.get("/getToggles", async (req, res) => {
 
 router.get("/getSkylineValues", async (req, res) => {
   try {
-    console.log(Object.keys(skyline).length)
+    // console.log(Object.keys(skyline).length)
     if (Object.keys(skyline).length > 0) {
       return res.status(200).json({skyline: Object.keys(skyline)});
     } else {
@@ -349,7 +351,26 @@ router.get("/getSkylineValues", async (req, res) => {
     }
 
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+    return res.status(500).json({ error: "Internal server error" + error });
+  }
+});
+
+router.get("/getFilterValues", async (req, res) => {
+  try {
+    const colleges = await College.find();
+    let filters = await generateFilters(colleges)
+    // console.log(filters)
+    // console.log("gjkhgkhgkfhgkghkdhgdkgkdhkdhkdhgkdk")
+    // console.log(Object.keys(filters))
+    if (Object.keys(filters).length > 0) {
+      return res.status(200).json({filters: filters});
+    } else {
+      return res.status(400).json({ error: "No filters values" });
+    }
+
+  } catch (error) {
+    // console.log(error);
     return res.status(500).json({ error: "Internal server error" + error });
   }
 });
