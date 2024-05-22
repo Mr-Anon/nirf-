@@ -24,19 +24,19 @@ async function getFiltered(response, filters) {
 
         // Check if the averages meet the filter criteria
         const ssDataArrayCriteriaMet = []
-        console.log(averages)
+        // console.log(averages)
         for(const attr of Object.keys(filters)){
             if (college.ssDataArray.length === 0) ssDataArrayCriteriaMet.push(false);
             if (averages[attr]) {
                 const [min, max] = filters[attr];
                 const avg = await calculateAverage(averages[attr]);
                 if (!(avg >= min && avg <= max)) {
-                    console.log(`Average ${avg} for ${attr} not within range [${min}, ${max}]`);
+                    // console.log(`Average ${avg} for ${attr} not within range [${min}, ${max}]`);
                 }
                 ssDataArrayCriteriaMet.push(avg >= min && avg <= max);
             } else if (typeof college[attr] === 'number' && typeof filters[attr] !== 'undefined') {
                 if (!(college[attr] >= filters[attr][0] && college[attr] <= filters[attr][1])) {
-                    console.log(`Value ${college[attr]} for ${attr} not within range [${filters[attr][0]}, ${filters[attr][1]}]`);
+                    // console.log(`Value ${college[attr]} for ${attr} not within range [${filters[attr][0]}, ${filters[attr][1]}]`);
                     ssDataArrayCriteriaMet.push(false);
                 }
                 ssDataArrayCriteriaMet.push(college[attr] >= filters[attr][0] && college[attr] <= filters[attr][1]);
@@ -44,7 +44,7 @@ async function getFiltered(response, filters) {
         }
     
    
-        await console.log(ssDataArrayCriteriaMet)
+        // await console.log(ssDataArrayCriteriaMet)
         if (ssDataArrayCriteriaMet.includes(false)){
             continue
         }
@@ -53,8 +53,8 @@ async function getFiltered(response, filters) {
         }
     }
 
-    await console.log("asdasdasdasd");
-    await console.log(filteredColleges.length);
+    // await console.log("asdasdasdasd");
+    // await console.log(filteredColleges.length);
     return filteredColleges;
 }
 

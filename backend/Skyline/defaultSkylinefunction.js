@@ -31,6 +31,8 @@
 //     return skylineColleges;
 // }
 
+
+
 async function computeSkyline(colleges, skyline) {
     let skylineColleges = [];
     let modifiedColleges = []
@@ -83,12 +85,12 @@ async function computeSkyline(colleges, skyline) {
             no_of_selected_for_higher_studies: 0,
             number_of_students_graduating: 0,
             number_of_students_placed: 0
-          };
+        };
 
         for (let param in averageData) {
             modifiedCollege[param] += averageData[param];
         }
-        
+
         await modifiedColleges.push(modifiedCollege)
         // await console.log(modifiedCollege)
         // console.log(college.averageData)
@@ -138,17 +140,39 @@ async function getSkyline(response, skyline) {
     var colleges = response.college;
     // console.log(skyline)
     // console.log(colleges.length)
-   
+
     // Example colleges data
     // const colleges = [
     //     { name: "College A", median_salary: 70000, students_in_graduating_batch: 100, no_of_faculty: 378, },
     //     { name: "College B", median_salary: 60000, students_in_graduating_batch: 120, no_of_faculty: 378, },
     //     { name: "College C", median_salary: 65000, students_in_graduating_batch: 110, no_of_faculty: 734, }
     // ];
-    
+
     // Compute skyline
-    const skylineColleges = await computeSkyline(colleges, skyline);
-    
+    var skylineColleges = await computeSkyline(colleges, skyline);
+    console.log('colleges.length')
+    console.log(colleges.length)
+
+    // skylineColleges.push(await computeSkyline((colleges.filter(item => item !== skylineColleges),skyline)))
+    console.log('skylineColleges.length')
+    console.log(skylineColleges.length)
+    var flag = true
+    while (flag) {
+        var len = skylineColleges.length
+        if (len >= 5) {
+            flag = false
+        }
+        for (let i = 0; i < len; ++i) {
+            colleges = await colleges.filter((_, index) => index !== colleges.indexOf(skylineColleges[i]));
+            // console.log('colleges.length')
+            // console.log(colleges.length)
+        }
+        for (let skylineCollege of await computeSkyline(colleges, skyline)) {
+            skylineColleges.push(skylineCollege);
+            console.log('skylineColleges.length')
+            console.log(skylineColleges.length)
+        }
+    }
     // console.log("Skyline Colleges:");
     // console.log(skylineColleges);
 

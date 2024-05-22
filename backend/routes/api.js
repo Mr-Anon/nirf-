@@ -306,6 +306,36 @@ router.get("/getAllCollege", async (req, res) => {
   }
 });
 
+router.get("/getAllCollegeUnranked", async (req, res) => {
+  try {
+    const colleges = await College.find();
+    // console.log(colleges);
+    if (colleges.length > 0) {
+      return res.status(200).json({ college: colleges });
+    } else {
+      return res.status(400).json({ error: "No colleges" });
+    }
+  } catch (error) {
+    // console.log(error);
+    return res.status(500).json({ error: "Internal server error" + error });
+  }
+});
+
+router.get("/getAllCutoff", async (req, res) => {
+  try {
+    const cutoff = await Cutoffs.find();
+    // console.log(cutoff);
+    if (cutoff.length > 0) {
+      return res.status(200).json({ cutoff: cutoff });
+    } else {
+      return res.status(400).json({ error: "No Cutoffs" });
+    }
+  } catch (error) {
+    // console.log(error);
+    return res.status(500).json({ error: "Internal server error" + error });
+  }
+});
+
 router.post("/getToggledColleges", async (req, res) => {
   try {
     // console.log(req.body)
