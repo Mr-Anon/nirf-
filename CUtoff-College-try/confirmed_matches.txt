@@ -1,0 +1,129 @@
+API 1: Central University of Jammu
+API 2: Central University of Jammu
+
+API 1: Dr. B R Ambedkar National Institute of Technology, Jalandhar
+API 2: Dr. B R Ambedkar National Institute of Technology, Jalandhar
+
+API 1: Indian Institute of Engineering Science and Technology, Shibpur Howrah
+API 2: Indian Institute of Engineering Science and Technology, Shibpur
+
+API 1: Indian Institute of Information Technology Guwahati
+API 2: Indian Institute of Information Technology Guwahati
+
+API 1: Indian Institute of Technology Bhubaneswar
+API 2: Indian Institute  of Technology Bhubaneswar
+
+API 1: Indian Institute of Technology Bombay Mumbai
+API 2: Indian Institute  of Technology Bombay
+
+API 1: Indian Institute of Technology Delhi New Delhi
+API 2: Indian Institute  of Technology Delhi
+
+API 1: Indian Institute of Technology Gandhinagar
+API 2: Indian Institute  of Technology Gandhinagar
+
+API 1: Indian Institute of Technology Guwahati
+API 2: Indian Institute  of Technology Guwahati
+
+API 1: Indian Institute of Technology Hyderabad
+API 2: Indian Institute  of Technology Hyderabad
+
+API 1: Indian Institute of Technology Indore
+API 2: Indian Institute  of Technology Indore
+
+API 1: Indian Institute of Technology Jodhpur
+API 2: Indian Institute  of Technology Jodhpur
+
+API 1: Indian Institute of Technology Kanpur
+API 2: Indian Institute  of Technology Kanpur
+
+API 1: Indian Institute of Technology Kharagpur
+API 2: Indian Institute  of Technology Kharagpur
+
+API 1: Indian Institute of Technology Madras Chennai
+API 2: Indian Institute  of Technology Madras
+
+API 1: Indian Institute of Technology Mandi
+API 2: Indian Institute  of Technology Mandi
+
+API 1: Indian Institute of Technology Palakkad
+API 2: Indian Institute  of Technology Palakkad
+
+API 1: Indian Institute of Technology Patna
+API 2: Indian Institute  of Technology Patna
+
+API 1: Indian Institute of Technology Roorkee
+API 2: Indian Institute  of Technology Roorkee
+
+API 1: Indian Institute of Technology Ropar Rupnagar
+API 2: Indian Institute  of Technology Ropar
+
+API 1: Institute of Chemical Technology Mumbai
+API 2: Institute of Chemical Technology, Mumbai: Indian Oil Odisha Campus, Bhubaneswar
+
+API 1: Malaviya National Institute of Technology Jaipur
+API 2: Malaviya National Institute of Technology Jaipur
+
+API 1: Mizoram University Aizawl Mizoram
+API 2: Mizoram University, Aizawl
+
+API 1: National Institute of Technology Delhi
+API 2: National Institute of Technology Delhi
+
+API 1: National Institute of Technology Durgapur
+API 2: National Institute of Technology Durgapur
+
+API 1: National Institute of Technology Hamirpur
+API 2: National Institute of Technology Hamirpur
+
+API 1: National Institute of Technology Karnataka, Surathkal 
+API 2: National Institute of Technology Karnataka, Surathkal
+
+API 1: National Institute of Technology Patna
+API 2: National Institute of Technology Patna
+
+API 1: National Institute of Technology Rourkela
+API 2: National Institute of Technology, Rourkela
+
+API 1: National Institute of Technology Silchar
+API 2: National Institute of Technology, Silchar
+
+API 1: National Institute of Technology Srinagar
+API 2: National Institute of Technology, Srinagar
+
+API 1: National Institute of Technology Tiruchirappalli
+API 2: National Institute of Technology, Tiruchirappalli
+
+API 1: National Institute of Technology Warangal
+API 2: National Institute of Technology, Warangal
+
+API 1: National Institute of Technology, Raipur
+API 2: National Institute of Technology Raipur
+
+API 1: Tezpur University
+API 2: School of Engineering, Tezpur University, Napaam, Tezpur
+
+API 1: University of Hyderabad
+API 2: University of Hyderabad
+
+API 1: University of Jammu
+API 2: Central University of Jammu
+
+API 1: Visvesvaraya National Institute of Technology, Nagpur
+API 2: Visvesvaraya National Institute of Technology, Nagpur
+
+API 1: Indian Institute of Technology (Banaras Hindu University) Varanasi
+API 2: Indian Institute  of Technology (BHU) Varanasi
+
+API 1: Indian Institute of Technology (Banaras Hindu University) Varanasi
+API 2: Indian Institute  of Technology (BHU) Varanasi
+
+API 1: Jawaharlal Nehru University New Delhi
+API 2: Jawaharlal Nehru University, Delhi
+
+API 1: Pandit Dwarka Prasad Mishra Indian Institute of Information Technology, Design and Manufacturing (IIITDM) Jabalpur
+API 2: Pt. Dwarka Prasad Mishra Indian Institute of Information Technology, Design & Manufacture Jabalpur
+
+API 1: School of Planning and Architecture Bhopal
+API 2: School of Planning & Architecture, Bhopal
+
