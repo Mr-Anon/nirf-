@@ -6,8 +6,26 @@ const rankColleges = require('../ranking/defaultRankingFunc');
 const rankToggledColleges = require('../ranking/toggledRankingFunc');
 const weights = require('../ranking/defaultWeights');
 const toggles = require('../toggles/defaultToggles');
-const skyline = require('../Skyline/defaultSkylineValues')
-const generateFilters = require('../filters/defaultfilterValues')
+const skyline = require('../Skyline/defaultSkylineValues');
+const generateFilters = require('../filters/defaultfilterValues');
+const getBranches = require("../cutoffToggles/getBranchToggles");
+
+async function getUniqueElements(arr) {
+  const uniqueElements = new Set();
+  arr.forEach(async (subArray) => {
+    subArray[1].forEach(async (element) => {
+      await uniqueElements.add(element);
+    })
+  });
+  return Array.from(uniqueElements);
+}
+
+async function getMinMaxcutoff(codes, branch) {
+  console.log("i am here")
+  var cutoffs = await Cutoffs.find({ _id: { $in: codes } });
+  return cutoffs;
+}
+
 
 // @route POST api/applicant/register
 // @desc Register user
@@ -41,7 +59,7 @@ router.post("/addCollege", (req, res) => {
           res.json(college)
 
         })
-        // .catch(err => console.log(err));
+      // .catch(err => console.log(err));
     }
   });
 }
@@ -306,6 +324,33 @@ router.get("/getAllCollege", async (req, res) => {
   }
 });
 
+router.post("/updateCodeToCuttoffId", async (req, res) => {
+  try {
+    // const colleges = await College.find();
+    const cutoff = await Cutoffs.findOne({ institute_name: req.body.cutoffName });
+    if (cutoff == null) {
+      return res.status(400).json('Cutoff not found');
+    }
+    const result = await College.findOneAndUpdate(
+      { name: req.body.collegeName }, // Filter
+      { $set: { code: cutoff._id.toString() } }, // Update operation
+      { returnOriginal: false } // Option to return the updated document
+    );
+
+    console.log(result)
+
+    if (result != null) {
+      return res.status(200).json({ Message: "College code updated successfully:" + result });
+    } else {
+      return res.status(400).json({ error: "College not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal server error" + error });
+  }
+});
+
+
 router.get("/getAllCollegeUnranked", async (req, res) => {
   try {
     const colleges = await College.find();
@@ -357,8 +402,13 @@ router.post("/getToggledColleges", async (req, res) => {
 router.get("/getToggles", async (req, res) => {
   try {
     // console.log(Object.keys(toggles).length)
+    const colleges = await College.find();
+    let branches = await getUniqueElements(await getBranches({ college: colleges }));
+    // console.log(branches);
+    let togglesList = Object.keys(toggles);
+    togglesList.push(...branches);
     if (Object.keys(toggles).length > 0) {
-      return res.status(200).json({toggles: Object.keys(toggles)});
+      return res.status(200).json({ toggles: togglesList });
     } else {
       return res.status(400).json({ error: "No toggles" });
     }
@@ -375,7 +425,7 @@ router.get("/getSkylineValues", async (req, res) => {
   try {
     // console.log(Object.keys(skyline).length)
     if (Object.keys(skyline).length > 0) {
-      return res.status(200).json({skyline: Object.keys(skyline)});
+      return res.status(200).json({ skyline: Object.keys(skyline) });
     } else {
       return res.status(400).json({ error: "No skyline values" });
     }
@@ -394,7 +444,7 @@ router.get("/getFilterValues", async (req, res) => {
     // console.log("gjkhgkhgkfhgkghkdhgdkgkdhkdhkdhgkdk")
     // console.log(Object.keys(filters))
     if (Object.keys(filters).length > 0) {
-      return res.status(200).json({filters: filters});
+      return res.status(200).json({ filters: filters });
     } else {
       return res.status(400).json({ error: "No filters values" });
     }
@@ -405,4 +455,10 @@ router.get("/getFilterValues", async (req, res) => {
   }
 });
 
-module.exports = router;
+// module.exports = router;
+// module.exports.getMinMaxcutoff = getMinMaxcutoff;
+
+module.exports = {
+  router: router,
+  getMinMaxcutoff: getMinMaxcutoff
+};
