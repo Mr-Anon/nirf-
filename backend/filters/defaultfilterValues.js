@@ -49,7 +49,8 @@ async function generateFilters(colleges) {
             median_salary: 0,
             no_of_selected_for_higher_studies: 0,
             number_of_students_graduating: 0,
-            number_of_students_placed: 0
+            number_of_students_placed: 0,
+            cutoff_rank: 0,
           };
 
         for (let param in averageData) {
@@ -64,6 +65,7 @@ async function generateFilters(colleges) {
         delete modifiedCollege.pcs_lift_ramps;
         delete modifiedCollege.__v;
         delete modifiedCollege._id;
+        delete modifiedCollege.code;
         await modifiedColleges.push(modifiedCollege)
         // await console.log(modifiedCollege)
     }

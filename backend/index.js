@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();//app
 const app = express();// db
-const api = require("./routes/api.js")
+const router = require("./routes/api.js")
 
 
 
@@ -16,7 +16,7 @@ mongoose
 //middlewares
 app.use(bodyParser.json());
 app.use(cors());
-app.use("/api", api.router);
+app.use("/api", router);
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
   console.log(`Server is running on ${port}`)

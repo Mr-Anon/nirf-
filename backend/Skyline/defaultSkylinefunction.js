@@ -154,12 +154,12 @@ async function getSkyline(response, skyline) {
     console.log(colleges.length)
 
     // skylineColleges.push(await computeSkyline((colleges.filter(item => item !== skylineColleges),skyline)))
-    console.log('skylineColleges.length')
-    console.log(skylineColleges.length)
+    // console.log('skylineColleges.length')
+    // console.log(skylineColleges.length)
     var flag = true
     while (flag) {
         var len = skylineColleges.length
-        if (len >= 5) {
+        if (len >= 5 || len >= colleges.length) {
             flag = false
         }
         for (let i = 0; i < len; ++i) {
@@ -189,7 +189,9 @@ async function getSkyline(response, skyline) {
     //     colleges = ToggleFilterCollegesByPG(colleges);
     // }
     // console.log(colleges.length)
-    return skylineColleges;
+    return {college: skylineColleges, 
+            cutoff: response.cutoff,
+    };
 }
 
 module.exports = getSkyline;

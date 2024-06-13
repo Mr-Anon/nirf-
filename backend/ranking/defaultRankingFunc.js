@@ -81,7 +81,8 @@ function rankColleges(response, weights) {
     }).sort((a, b) => b.weightedScore - a.weightedScore);
 
     // console.log(rankedList)
-    return rankedList;
+    return {college: rankedList,
+            cutoff: response.cutoff};
 }
 
 

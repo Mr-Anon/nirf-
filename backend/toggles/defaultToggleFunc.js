@@ -1,5 +1,5 @@
-const getBranches = require('../cutoffToggles/getBranchToggles');
-const api = require('../routes/api');
+const { get } = require('mongoose');
+const cutoffFunc = require('../cutoffToggles/getBranchToggles');
 
 
 async function ToggleFilterCollegesByFacilities(colleges) {
@@ -26,7 +26,7 @@ async function ToggleFilterCollegesByPG(colleges) {
 }
 
 async function getBranchedColleges(response, branches) {
-    const branchToggles = await getBranches(response);
+    const branchToggles = await cutoffFunc.getBranches(response);
     let codes = [];
     branchToggles.forEach(entry => {
         branches.forEach(branch => {
@@ -39,29 +39,40 @@ async function getBranchedColleges(response, branches) {
     const branchedColleges = await colleges.filter(college => {
         return codes.includes(college.code);
     });
-    console.log(await api.getMinMaxcutoff(codes, branches));
-    return branchedColleges, codes;
+
+    // console.log(branchedColleges);
+    return [branchedColleges, await cutoffFunc.getMinMaxcutoff(codes, branches)];
 }
 
 async function getRankedToggled(response, toggles) {
     var colleges = response.college;
-    // console.log(toggles)
+    console.log(response.cutoff)
     // console.log(colleges.length)
 
     if (toggles.PCS == true) {
-        console.log("PCS toggle True")
+        // console.log("PCS toggle True")
         colleges = await ToggleFilterCollegesByFacilities(colleges);
     }
     if (toggles.UG == true) {
-        console.log("UG toggle True")
+        // console.log("UG toggle True")
         colleges = await ToggleFilterCollegesByUG(colleges);
     }
     if (toggles.PG == true) {
-        console.log("PG toggle True")
+        // console.log("PG toggle True")
         colleges = await ToggleFilterCollegesByPG(colleges);
     }
     const trueKeys = Object.keys(toggles).filter(key => toggles[key] === true);
-    return await getBranchedColleges({college: colleges}, trueKeys.filter(key => key !== 'PCS' && key !== 'UG' && key !== 'PG'));;
+    // let [min, max] = [0, 0];
+    // if (trueKeys.filter(key => key !== 'PCS' && key !== 'UG' && key !== 'PG').length !== 0) {
+    //     var output = await getBranchedColleges({ college: colleges }, trueKeys.filter(key => key !== 'PCS' && key !== 'UG' && key !== 'PG'));
+    //     colleges = output[0];
+    //     [min, max] = output[1];
+    //     // console.log(colleges)
+    // }
+    return {
+        college: colleges,
+        cutoff: response.cutoff,
+    };
 }
 
 module.exports = getRankedToggled;
