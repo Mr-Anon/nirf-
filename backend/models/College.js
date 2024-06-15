@@ -84,7 +84,7 @@ const ssDataSchema = new mongoose.Schema({
    }
 });
 
-let userSchema = new Schema({
+let collegeSchema = new Schema({
    name: {
       type: String,
       required: true
@@ -132,4 +132,4 @@ let userSchema = new Schema({
    collection: 'colleges'
 })
 
-module.exports = mongoose.model('Colleges', userSchema);
+module.exports = mongoose.model('Colleges', collegeSchema);
