@@ -494,7 +494,7 @@ router.post("/register", async (req, res) => {
 // @route POST api/user/login
 // @desc Login user
 // @access Public
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   // Check if the user exists
   User.findOne({ email }).then(user => {
