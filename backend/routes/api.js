@@ -511,8 +511,7 @@ router.post("/login", (req, res) => {
           const payload = {
             id: user.id,
             name: user.name,
-            email: user.email,
-            isadmin: user.isAdmin
+            email: user.email
           };
 
           // Sign token
