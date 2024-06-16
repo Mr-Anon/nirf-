@@ -13,6 +13,7 @@ const cutoffFunc = require("../cutoffToggles/getBranchToggles");
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
+const PendingCutoffs = require('../models/PendingCutoffs');
 
 async function getUniqueElements(arr) {
   const uniqueElements = new Set();
@@ -530,14 +531,37 @@ router.post("/login", (req, res) => {
 
 router.post("/addCutoffIdToUser", async (req, res) => {
   try {
-    const { userId, cutoffId } = req.body;
+    var token = req.token;
+    const decoded = jwt.verify(token, keys.secretOrKey);
+    const {id} = decoded;
 
     // Find the user by userId
-    const user = await User.findById(userId);
+    const user = await User.findById(id);
 
     if (!user) {
       return res.status(400).json({ error: "User not found" });
     }
+
+    // Create a new PendingCutoffs instance
+    const newPendingCutoff = new PendingCutoffs({
+      institute_name: req.body.institute_name,
+      Academic_Program_Name: req.body.Academic_Program_Name,
+      Quota: req.body.Quota,
+      Seat_Type: req.body.Seat_Type,
+      Gender: req.body.Gender,
+      Opening_Rank: req.body.Opening_Rank,
+      Closing_Rank: req.body.Closing_Rank,
+      link: req.body.link,
+      User_Id: id
+    });
+    // Save the new pending cutoff to the database
+    const savedPendingCutoff = await newPendingCutoff.save();
+    const cutoffId = savedPendingCutoff._id;
+
+    // Add the cutoffId to the user's cutoffIds array
+    user.cutoff_ids.push(cutoffId);
+    // Save the updated user
+    await user.save();
 
     // Add the cutoffId to the user's cutoffIds array
     user.cutoff_ids.push(cutoffId);

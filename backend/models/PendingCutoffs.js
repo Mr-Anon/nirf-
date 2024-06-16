@@ -9,6 +9,7 @@ const cutoffsSchema = new Schema({
   Gender: String,
   Opening_Rank: Number,
   Closing_Rank: Number,
+  link: String,
   User_Id: String
 });
 
