@@ -531,7 +531,7 @@ router.post("/login", (req, res) => {
 
 router.post("/addCutoffIdToUser", async (req, res) => {
   try {
-    var token = req.token;
+    var token = req.body.token;
     const decoded = jwt.verify(token, keys.secretOrKey);
     const {id} = decoded;
 
