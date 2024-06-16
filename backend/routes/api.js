@@ -458,9 +458,8 @@ router.get("/getFilterValues", async (req, res) => {
 // @route POST api/user/register
 // @desc Register user
 // @access Public
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
-
   // Check if the user already exists
   User.findOne({ email }).then(user => {
     if (user) {
