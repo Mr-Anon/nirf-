@@ -468,7 +468,8 @@ router.post("/register", async (req, res) => {
       const newUser = new User({
         name,
         email,
-        password
+        password,
+        isAdmin: false,
       });
 
       // Hash password before saving in database
@@ -517,7 +518,7 @@ router.post("/login", async (req, res) => {
           // Sign token
           return jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 });
         }
-        return res.status(200).json({ token });
+        return res.status(200).json({ token: token, isAdmin: user.isAdmin });
       } else {
         return res.status(400).json({ error: "Incorrect password" });
       }
@@ -528,11 +529,11 @@ router.post("/login", async (req, res) => {
   });
 });
 
-router.post("/addCutoffIdToUser", async (req, res) => {
+router.post("/addUserCutoff", async (req, res) => {
   try {
     var token = req.body.token;
     const decoded = jwt.verify(token, keys.secretOrKey);
-    const {id} = decoded;
+    const { id } = decoded;
 
     // Find the user by userId
     const user = await User.findById(id);
@@ -575,6 +576,49 @@ router.post("/addCutoffIdToUser", async (req, res) => {
   }
 });
 // module.exports = router;
+
+router.get("/getAllFromData", async (req, res) => {
+  try {
+    const colleges = await College.find({}, { name: 1 });
+    const collegeNames = colleges.map(college => college.name);
+    const cutoffs = await Cutoffs.find({});
+    const quotas = [];
+    const seatTypes = [];
+    const genders = [];
+    cutoffs.forEach(cutoff => {
+      cutoff.academic_programs.forEach(program => {
+        program.quotas.forEach(quota => {
+          quotas.push(quota.quota_name);
+          quota.seat_types.forEach(seatType => {
+            seatTypes.push(seatType.seat_type_name);
+            seatType.genders.forEach(gender => {
+              genders.push(gender.gender_name);
+            })
+          });
+        });
+      });
+    });
+
+    // Create a Set from the quotas array to ensure uniqueness
+    const uniqueQuotas = new Set(quotas);
+    // Convert the Set back to an array
+    const uniqueQuotasArray = Array.from(uniqueQuotas);
+
+    // Create a Set from the seatTypes array to ensure uniqueness
+    const uniqueSeatTypes = new Set(seatTypes);
+    // Convert the Set back to an array
+    const uniqueSeatTypesArray = Array.from(uniqueSeatTypes);
+    const uniqueGenders = new Set(genders);
+
+    // Convert the Set back to an array
+    const uniqueGendersArray = Array.from(uniqueGenders);
+
+    return res.status(200).json({ collegeNames: collegeNames, genders: uniqueGendersArray, quotas: uniqueQuotasArray, seatTypes: uniqueSeatTypesArray });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 
 
