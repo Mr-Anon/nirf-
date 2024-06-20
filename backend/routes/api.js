@@ -388,7 +388,7 @@ router.post("/getToggledColleges", async (req, res) => {
     if (colleges.length > 0) {
       // console.log("asdasd")
       // console.log(req.body.filters)
-      return res.status(200).json(await rankToggledColleges({ college: colleges }, weights, req.body));
+      return res.status(200).json(await rankToggledColleges({ college: colleges }, req.body.weights, req.body));
     } else {
       return res.status(400).json({ error: "No colleges" });
     }
@@ -620,6 +620,24 @@ router.get("/getAllFromData", async (req, res) => {
   }
 });
 
+router.get("/getAllPendingCutoffs", async (req, res) => {
+  try {
+    const pendingCutoffs = await PendingCutoffs.find();
+    return res.status(200).json({ pendingCutoffs: pendingCutoffs });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/getDefaultWeights", (req, res) => {
+  try {
+    res.status(200).json({ weights });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 
 module.exports = router
