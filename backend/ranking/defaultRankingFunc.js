@@ -32,7 +32,7 @@ function rankColleges(response, weights) {
             },
             noOfSelectedForHigherStudies: {
                 weight: weights.noOfSelectedForHigherStudies, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.no_of_selected_for_higher_studies / 100, 0) / college.ssDataArray.length;
+                    return college.ssDataArray.reduce((acc, curr) => acc + 100*(curr.no_of_selected_for_higher_studies / curr.total_students), 0) / college.ssDataArray.length;
                 }
             },
             fullTimePhD: { weight: weights.fullTimePhD, getValue: college => college.fulltime_phd / 100 },
@@ -43,24 +43,26 @@ function rankColleges(response, weights) {
             pcsWheelchair: { weight: weights.pcsWheelchair, getValue: college => college.pcs_wheelchair ? 5 : 0 },
             pcsDesignedToilets: { weight: weights.pcsDesignedToilets, getValue: college => college.pcs_designed_toilets ? 5 : 0 },
             // Add more parameters
+            // total_students: {weight: 1, getValue: college.ssDataArray.reduce((acc,curr) => curr.total_students)},
             economicallyBackwardStudents: {
                 weight: weights.economicallyBackwardStudents, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.economically_backward_students / 100, 0) / college.ssDataArray.length;
+                    // return college.ssDataArray.reduce((acc, curr) => acc + curr.total_students, 0) / college.ssDataArray.length;
+                    return college.ssDataArray.reduce((acc, curr) => acc + 100*(curr.economically_backward_students / curr.total_students), 0) / college.ssDataArray.length;
                 }
             },
             sociallyChallengedStudents: {
                 weight: weights.sociallyChallengedStudents, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.socially_challenged_students / 100, 0) / college.ssDataArray.length;
+                    return college.ssDataArray.reduce((acc, curr) => acc + 100*(curr.socially_challenged_students / curr.total_students), 0) / college.ssDataArray.length;
                 }
             },
             withinStateStudents: {
                 weight: weights.withinStateStudents, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.within_state_students / 100, 0) / college.ssDataArray.length;
+                    return college.ssDataArray.reduce((acc, curr) => acc + 100*(curr.within_state_students / curr.total_students), 0) / college.ssDataArray.length;
                 }
             },
             outsideStateStudents: {
                 weight: weights.outsideStateStudents, getValue: college => {
-                    return college.ssDataArray.reduce((acc, curr) => acc + curr.outside_state_students / 100, 0) / college.ssDataArray.length;
+                    return college.ssDataArray.reduce((acc, curr) => acc + 100*(curr.outside_state_students / curr.total_students), 0) / college.ssDataArray.length;
                 }
             }
             // Add more parameters here 
@@ -71,7 +73,7 @@ function rankColleges(response, weights) {
             if (parameters.hasOwnProperty(paramName)) {
                 const paramWeight = parameters[paramName].weight;
                 const paramValue = parameters[paramName].getValue(college);
-                // console.log(paramName + ": " + paramValue)
+                console.log(paramName + ": " + paramValue)
                 if (!isNaN(paramValue))
                     weightedScore += paramWeight * paramValue;
             }
